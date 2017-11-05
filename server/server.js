@@ -15,15 +15,25 @@ io.on('connection', (socket) => {
         console.log('User was disconnected')
     })
 
-    socket.emit('newEmail', {
-        from: 'Rick',
-        text: 'Hello',
-        createdAt: 2017
+    socket.emit('newMessage', {
+        from: 'admin',
+        text: 'Welcom to chat room!'
     })
 
-    socket.on('createEmail', (email) => {
+    socket.broadcast.emit('newMessage', {
+        from: 'admin',
+        text: 'New user joined',
+        createdAt: new Date().getTime()
+    })
+
+    socket.on('createMessage', (email) => {
         console.log(email)
 
+        // socket.broadcast.emit('newMessage', {
+        //     from: 'Wyyx',
+        //     text: 'Hello You',
+        //     createdAt: new Date().getTime()
+        // })
     })
 
 })
