@@ -4,6 +4,10 @@ const express = require('express')
 const http = require('http')
 const socketIO = require('socket.io')
 
+const {
+    generateMessage
+} = require('./utils/message')
+
 const app = express()
 const server = http.createServer(app)
 const io = socketIO(server)
@@ -13,27 +17,18 @@ io.on('connection', (socket) => {
 
     socket.on('disconnect', () => {
         console.log('User was disconnected')
+        socket.broadcast.emit('userGone', generateMessage('admin', 'A user gone'))
     })
 
-    socket.emit('newMessage', {
-        from: 'admin',
-        text: 'Welcom to chat room!'
-    })
+    socket.emit('newMessage', generateMessage('admin', 'Welcom to chat room!'))
 
-    socket.broadcast.emit('newMessage', {
-        from: 'admin',
-        text: 'New user joined',
-        createdAt: new Date().getTime()
-    })
+    socket.broadcast.emit('newMessage', generateMessage('admin', 'New user joined'))
 
-    socket.on('createMessage', (email) => {
-        console.log(email)
 
-        // socket.broadcast.emit('newMessage', {
-        //     from: 'Wyyx',
-        //     text: 'Hello You',
-        //     createdAt: new Date().getTime()
-        // })
+    socket.on('createMessage', (message, callback) => {
+        console.log(message)
+        io.emit('newMessage', message)
+        callback('Got it! (from server)')
     })
 
 })

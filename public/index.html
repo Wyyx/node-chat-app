@@ -10,9 +10,14 @@
 
 <body>
     <div>
-        <h1>Hello Express</h1>
+        <ol id="message-list"></ol>
+        <form id="message-form">
+            <input name="message" type="text" placeholder="Message" />
+            <button>Send</button>
+        </form>
     </div>
     <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/libs/jquery-3.2.1.js"></script>
     <script src="/js/index.js"></script>
 </body>
 
