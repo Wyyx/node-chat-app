@@ -6,18 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 
-<body>
-    <div>
-        <ol id="message-list"></ol>
-        <form id="message-form">
-            <input name="message" type="text" placeholder="Message" />
-            <button>Send</button>
-        </form>
+<body class="chat">
 
-        <button id="location-button">Send Location</button>
+    <div class="chat__sidebar">
+        <h3>People</h3>
+        <div id="users"></div>
     </div>
+
+    <div class="chat__main">
+
+        <ol id="message-list"></ol>
+
+        <div class="chat__footer">
+            <form id="message-form">
+                <input name="message" type="text" placeholder="Message" autofocus/>
+                <button>Send</button>
+            </form>
+            <button id="location-button">Send Location</button>
+        </div>
+
+    </div>
+
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/libs/jquery-3.2.1.js"></script>
     <script src="/js/index.js"></script>
