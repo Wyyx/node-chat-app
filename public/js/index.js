@@ -16,36 +16,54 @@ socket.on('userGone', function (message) {
 
 
 socket.on('newMessage', function (message) {
+    var formattedTime = moment(message.createdAt).format('HH:mm a')
 
-    var li = jQuery('<li></li>')
-    li.text(`${message.from}: ${message.text}`)
+    var template = jQuery('#message-template').html()
+    var html = Mustache.render(template, {
+        from: message.from,
+        text: message.text,
+        createdAt: formattedTime
+    })
 
-    jQuery('#message-list').append(li)
+    jQuery('#message-list').append(html)
 })
 
 socket.on('newLocationMessage', function (locationMessage) {
-    console.log(locationMessage)
+    var formattedTime = moment(locationMessage.createdAt).format('HH:mm a')
 
-    var li = jQuery('<li></li>')
-    var a = jQuery('<a target="blank">My Current Location</a>')
+    var template = jQuery('#location-template').html()
 
-    li.text(`${locationMessage.from}: `)
-    a.attr('href', locationMessage.url)
-    li.append(a)
-    jQuery('#message-list').append(li)
+    var html = Mustache.render(template, {
+        from: locationMessage.from,
+        url: locationMessage.url,
+        createdAt: formattedTime
+    })
+
+    jQuery('#message-list').append(html)
+
+    // var li = jQuery('<li></li>')
+    // var a = jQuery('<a target="blank">My Current Location</a>')
+
+    // li.text(`${locationMessage.from} ${formattedTime}: `)
+    // a.attr('href', locationMessage.url)
+    // li.append(a)
+    // jQuery('#message-list').append(li)
 })
 
 jQuery('#message-form').on('submit', function (e) {
     e.preventDefault()
     var messageTextBox = jQuery('[name=message]')
 
-    socket.emit('createMessage', {
-        from: 'Wyyx',
-        text: messageTextBox.val()
-    }, function (acknow) {
-        console.log(acknow)
-        messageTextBox.val('')
-    })
+    if (messageTextBox.val().trim()) {
+        socket.emit('createMessage', {
+            from: 'Wyyx',
+            text: messageTextBox.val()
+        }, function (acknow) {
+            console.log(acknow)
+            messageTextBox.val('')
+        })
+    }
+
 })
 
 var locationButton = jQuery('#location-button')
