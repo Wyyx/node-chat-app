@@ -5,12 +5,17 @@ const http = require('http')
 const socketIO = require('socket.io')
 
 const {
-    generateMessage
+    generateMessage,
+    generateLocationMessage
 } = require('./utils/message')
 
 const app = express()
 const server = http.createServer(app)
 const io = socketIO(server)
+
+
+
+
 
 io.on('connection', (socket) => {
     console.log('New user connected')
@@ -21,7 +26,6 @@ io.on('connection', (socket) => {
     })
 
     socket.emit('newMessage', generateMessage('admin', 'Welcom to chat room!'))
-
     socket.broadcast.emit('newMessage', generateMessage('admin', 'New user joined'))
 
 
@@ -31,11 +35,16 @@ io.on('connection', (socket) => {
         callback('Got it! (from server)')
     })
 
+    socket.on('createLocationMessage', (coords) => {
+        io.emit('newLocationMessage', generateLocationMessage('admin', coords.latitude, coords.longitude))
+    })
 })
+
+
+
 
 app.use(express.static(path.join(__dirname, '/../public')));
 const port = process.env.PORT || 3000
-
 
 server.listen(port, () => {
     console.log(`Started on port ${port}`)
