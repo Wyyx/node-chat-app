@@ -2,6 +2,18 @@ var socket = io()
 
 socket.on('connect', function () {
     console.log('Connected to server')
+
+    var params = jQuery.deparam(window.location.search)
+
+    socket.emit('join', params, function (err) {
+        if (err) {
+            alert(err)
+            window.location.href = '/'
+        } else {
+            console.log('No error')
+
+        }
+    })
 })
 
 socket.on('disconnet', function () {
@@ -40,6 +52,7 @@ socket.on('newLocationMessage', function (locationMessage) {
     })
 
     jQuery('#message-list').append(html)
+
 
     // var li = jQuery('<li></li>')
     // var a = jQuery('<a target="blank">My Current Location</a>')
