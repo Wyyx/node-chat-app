@@ -82,7 +82,6 @@ jQuery('#message-form').on('submit', function (e) {
 
     if (messageTextBox.val().trim()) {
         socket.emit('createMessage', {
-            from: 'Wyyx',
             text: messageTextBox.val()
         }, function (acknow) {
             console.log(acknow)
